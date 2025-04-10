@@ -1,70 +1,82 @@
-import requests
-import pystyle
-import concurrent
 import os
+import sys
 import ctypes
-import colorama
 import time
-from colorama import *
-from pystyle import *
+import requests
 from concurrent.futures import ThreadPoolExecutor
+from colorama import Fore, init
+from pystyle import Write, Colors
 
+init()
 os.system("cls")
+
+def set_title(title):
+    ctypes.windll.kernel32.SetConsoleTitleW(title)
 
 def log(text):
     Write.Print(text, Colors.red_to_white, interval=0.00)
 
-def title(title):
-    ctypes.windll.kernel32.SetConsoleTitleW(title)
-
-def webhook_nekoboy(url, content, username):
+def send_webhook(url, content, username):
     try:
         payload = {
             "content": content,
-            "username": username
+            "username": username,
+            "avatar_url": "https://raw.githubusercontent.com/duckboxxer/asset_rat_id_49e3fs303/refs/heads/main/depositphotos_63079503-stock-photo-clown.jpg"
         }
-        r = requests.post(url, json=payload)
-        if r.status_code == 204 or r.status_code == 200:
-            print(f"{Fore.GREEN}[+] {Fore.RESET} {r.status_code}")
-        elif r.status_code == 429:
-            retry_after = r.json().get("retry_after", 1000) / 1000 
-            print(f"{Fore.RED}[!] {Fore.RESET} RATELIITED ~ Retrying in {retry_after}s ")
+        response = requests.post(url, json=payload)
+
+        if response.status_code in [200, 204]:
+            print(f"{Fore.GREEN}[+] {Fore.RESET} Sent ({response.status_code})")
+        elif response.status_code == 429:
+            retry_after = response.json().get("retry_after", 1000) / 1000
+            print(f"{Fore.RED}[!] {Fore.RESET}Rate limited ~ Retrying in {retry_after}s")
+            time.sleep(retry_after)
+            send_webhook(url, content, username)
+        else:
+            print(f"{Fore.RED}[-] {Fore.RESET}Failed with status {response.status_code}")
     except Exception as e:
         print(f"{Fore.RED}[-] {Fore.RESET}{e}")
 
-def webhook_fuckoff():
-    URL = Write.Input("~@RAT/WEBHOOK | ", Colors.red_to_black, interval=0.00)
-    check = requests.get(URL)
+def start_webhook_spam():
+    url = Write.Input("~@RAT/WEBHOOK | ", Colors.red_to_white, interval=0.00)
 
-    print(f"{Fore.YELLOW}[INFO] {Fore.RESET}\n Checking Webhook")
+    try:
+        check = requests.get(url)
+    except Exception as e:
+        print(f"{Fore.RED}[ERROR] {Fore.RESET}Invalid URL: {e}")
+        sys.exit()
+
+    print(f"{Fore.YELLOW}[INFO] {Fore.RESET}Checking Webhook...")
 
     if check.status_code == 200:
         print(f"{Fore.GREEN}[INFO] {Fore.RESET}\n Webhook is valid!")
-        messages = Write.Input("~@RAT/MESSAGE | ", Colors.red_to_black, interval=0.00)
-        Username = Write.Input("~@RAT/USERNAME | ", Colors.red_to_black, interval=0.00)
-        amount = int(Write.Input("~@RAT/COUNT | ", Colors.red_to_black, interval=0.00))
+        message = Write.Input("~@RAT/MESSAGE | ", Colors.red_to_white, interval=0.00)
+        username = Write.Input("~@RAT/USERNAME | ", Colors.red_to_white, interval=0.00)
 
-        with ThreadPoolExecutor(max_workers=5) as executor:
-            for _ in range(amount):
-                executor.submit(webhook_nekoboy, URL, messages, Username)
-                executor.submit(webhook_nekoboy, URL, messages, Username)
-                executor.submit(webhook_nekoboy, URL, messages, Username)
+        try:
+            count = int(Write.Input("~@RAT/COUNT | ", Colors.red_to_white, interval=0.00))
+        except ValueError:
+            print(f"{Fore.RED}[-] {Fore.RESET}COUNT must be a number.")
+            return
+
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            for _ in range(count):
+                executor.submit(send_webhook, url, message, username)
     else:
-        print(f"{Fore.RED}[INFO] {Fore.RESET}\n Webhook is invalid")
+        print(f"{Fore.RED}[INFO] {Fore.RESET}Webhook is invalid")
         input("Press Enter To Exit")
-        time.sleep(0.3)
-        os.system("exit")
+        sys.exit()
 
-asciilogo = f"""
+ascii_logo = r"""
    ___  ___ ______
   / _ \/ _ /_  __/
  / , _/ __ |/ /   
 /_/|_/_/ |_/_/    
-
 """
 
 def main():
-    log(asciilogo)
-    webhook_fuckoff()
+    set_title("Ratted Ratted Rat 🐀")
+    log(ascii_logo)
+    start_webhook_spam()
 
 main()
