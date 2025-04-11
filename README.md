@@ -13,7 +13,6 @@
 <hr>
 
 ## 📝 Todo
-- [ ] Proxy Support
 - [ ] Multi Platfrom Support (Mac, linux)
 
 ---
