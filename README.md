@@ -4,6 +4,7 @@
     <img src="https://img.shields.io/github/languages/top/zakocord/RAT-Webhook?color=%23000000">
     <img src="https://img.shields.io/github/last-commit/zakocord/RAT-Webhook?color=%23000000&logoColor=%23000000">
     <img src="https://img.shields.io/github/stars/zakocord/RAT-Webhook?color=%23000000&logoColor=%23000000">
+    <p>✨️ Star Please! ✨️</p>
     <br>
     <br>
     <br>
