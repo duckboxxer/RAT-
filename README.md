@@ -19,9 +19,9 @@
 
 ## 📖 How Use
 <div align="center">
-    <a href="https://www.youtube.com/watch?v=CpzU1Rzas1w" target="_blank">
+    <a href="https://www.youtube.com/watch?v=LZqcU6LzVuU" target="_blank">
         <p>WATCH THE VIDEO</p>
-        <img src="https://img.youtube.com/vi/CpzU1Rzas1w/0.jpg" alt="Watch the video">
+        <img src="https://img.youtube.com/vi/LZqcU6LzVuU/0.jpg" alt="Watch the video">
     </a>
 </div>
 
