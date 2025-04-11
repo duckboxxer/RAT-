@@ -31,8 +31,8 @@ def proxy_config():
                 print(f"{Fore.YELLOW}[INFO] {Fore.RESET} No Proxies Mode")
                 return None
 
-            raw = random.choice(proxies)
-            ip, port, user, password = raw.split(":")
+            randomproxies = random.choice(proxies)
+            ip, port, user, password = randomproxies.split(":")
             proxy_auth = f"{user}:{password}@{ip}:{port}"
             proxy_url = f"http://{proxy_auth}"
 
@@ -61,9 +61,6 @@ def send_webhook(url, content, username, proxies):
             print(f"{Fore.RED}[!] {Fore.RESET}Rate limited ~ Retrying in {retry_after}s")
             time.sleep(retry_after)
             send_webhook(url, content, username, proxies)
-        elif response.status_code == 429:
-            print (f"{Fore.RED}[-]{Fore.RESET} Deleted Webhook")
-            sys.exit()
         else:
             print(f"{Fore.RED}[-] {Fore.RESET} Failed with status {response.status_code}")
     except requests.exceptions.RequestException as e:
@@ -83,7 +80,7 @@ def start_webhook_spam():
     print(f"{Fore.YELLOW}[INFO] {Fore.RESET}Checking Webhook...")
 
     if check.status_code == 200:
-        print(f"{Fore.GREEN}[INFO] {Fore.RESET}Webhook is valid!")
+        print(f"{Fore.GREEN}[INFO] {Fore.RESET}\n \n Webhook is valid!")
 
         message = Write.Input("~@RAT/MESSAGE | ", Colors.red_to_white, interval=0.00)
         username = Write.Input("~@RAT/USERNAME | ", Colors.red_to_white, interval=0.00)
@@ -105,7 +102,7 @@ def start_webhook_spam():
             print(f"{Fore.RED}[-] {Fore.RESET}Failed to load proxy settings")
 
     else:
-        print(f"{Fore.RED}[INFO] {Fore.RESET}Webhook is invalid")
+        print(f"{Fore.RED}[INFO] {Fore.RESET}\n \nWebhook is invalid")
         input("Press Enter To Exit")
         sys.exit()
 
