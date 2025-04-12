@@ -1,3 +1,4 @@
 requests
 pystyle
 colorama
+fake_useragent
