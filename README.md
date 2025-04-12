@@ -26,6 +26,12 @@
     </a>
 </div>
 
+---
+
+## 💻️ Supported Platfrom
+- Windows
+- [ ] Mac
+- [ ] Linux 
 
 ---
 
