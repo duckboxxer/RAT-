@@ -93,6 +93,7 @@ def webhook_spam():
 
         try:
             count = int(Write.Input("~@RAT/COUNT | ", Colors.red_to_white, interval=0.00))
+            Threads = int(Write.Input("~@RAT/Threads | ", Colors.red_to_white, interval=0.00))
         except ValueError:
             print(f"{Fore.RED}[-] {Fore.RESET}COUNT must be a number.")
             return
@@ -100,8 +101,7 @@ def webhook_spam():
         proxies = proxy_cfg()
 
         if proxies:
-            threads = min(count, 5)  
-            with ThreadPoolExecutor(max_workers=threads) as executor:
+            with ThreadPoolExecutor(max_workers=Threads) as executor:
                 for _ in range(count):
                     executor.submit(send_webhook, url, message, username, proxies)
         else:
